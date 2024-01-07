@@ -4,9 +4,9 @@
 socket.io chat app that uses redis to store user mesages (including media files).
 
 supported formats:  
-  images: jpg, jpeg, png, gif.  
-  videos: mp4, webm.  
-  audio: ogg, mp3, wav.  
+       images: jpg, jpeg, png, gif.  
+       videos: mp4, webm.  
+       audio: ogg, mp3, wav.  
 
 ## Run Locally
 
