@@ -21,29 +21,51 @@
 
         <div id="input-container">
             <input id="message" type="text" name="message" placeholder="Message" />
-            <button onclick="emitData()">Send</button>
+            <button id="fileButton" onclick="sendFile()">📎</button>
+            <button id="sendButton" onclick="sendText()">Send</button>
         </div>
         <div id="joined"></div>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
-       	const socket = io("http://localhost:3000");
+        const socket = io("http://localhost:3000");
 
-        function emitData() {
+        function sendText() {
             const message = document.querySelector("#message").value;
             if (message.length > 0) {
-                socket.emit("message", { message, from: "<%= username %>" });
-                document.querySelector("#message").value = ''; // Clear the input after sending
+                socket.emit("message", { message: { type: "text", content: message, filename: "" }, from: "<%= username %>" });
+                document.querySelector("#message").value = '';
             }
+        }
+
+        function sendFile() {
+            const fileInput = document.createElement("input");
+            fileInput.type = "file";
+
+            fileInput.addEventListener("change", (event) => {
+                const selectedFile = event.target.files[0];
+
+                if (selectedFile) {
+                    const reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        const fileContent = e.target.result;
+                        socket.emit("message", { message: { type: "file", content: fileContent, filename: selectedFile.name }, from: "<%= username %>" });
+                    };
+
+                    reader.readAsDataURL(selectedFile);
+                }
+            });
+
+            fileInput.click();
         }
 
         function handleKeyPress(event) {
             if (event.key === "Enter") {
-                emitData();
+                sendText();
             }
         }
-
         document.getElementById("message").addEventListener("keydown", handleKeyPress);
 
         socket.on("message", ({ from, message }) => {
@@ -55,18 +77,60 @@
             usernameElement.innerText = `${from}: `;
             messageElement.appendChild(usernameElement);
 
-            const messageTextElement = document.createElement("span");
-            messageTextElement.innerText = message;
-            messageElement.appendChild(messageTextElement);
+            if (message.type === "text") {
+                const messageTextElement = document.createElement("span");
+                messageTextElement.innerText = message.content;
+                messageElement.appendChild(messageTextElement);
+            } else if (message.type === "file") {
+                if (isImageFile(message.filename)) {
+                    const imageElement = document.createElement("img");
+                    imageElement.src = message.content;
+                    imageElement.style.maxWidth = "80%";
+                    messageElement.appendChild(imageElement);
+                } else if (isVideoFile(message.filename)) {
+                    const videoElement = document.createElement("video");
+                    videoElement.src = message.content;
+                    videoElement.controls = true;
+                    messageElement.appendChild(videoElement);
+                } else if (isAudioFile(message.filename)) {
+                    const audioElement = document.createElement("audio");
+                    audioElement.src = message.content;
+                    audioElement.controls = true;
+                    messageElement.appendChild(audioElement);
+                } else {
+                    const fileLinkElement = document.createElement("a");
+                    fileLinkElement.innerText = `Download ${message.filename}`;
+                    fileLinkElement.href = message.content;
+                    fileLinkElement.download = message.filename;
+                    messageElement.appendChild(fileLinkElement);
+                }
+            }
 
             document.querySelector("#messages").appendChild(messageElement);
 
             document.getElementById("messages-container").scrollTop = document.getElementById("messages-container").scrollHeight;
         });
 
-        socket.on("joined", username => {
+        function isImageFile(filename) {
+            const imageExtensions = ["jpg", "jpeg", "png", "gif"];
+            const extension = filename.split(".").pop().toLowerCase();
+            return imageExtensions.includes(extension);
+        }
 
-			const messageElement = document.createElement("div");
+        function isVideoFile(filename) {
+            const videoExtensions = ["mp4", "webm", "ogg"];
+            const extension = filename.split(".").pop().toLowerCase();
+            return videoExtensions.includes(extension);
+        }
+
+        function isAudioFile(filename) {
+            const audioExtensions = ["mp3", "ogg", "wav"];
+            const extension = filename.split(".").pop().toLowerCase();
+            return audioExtensions.includes(extension);
+        }
+
+        socket.on("joined", username => {
+            const messageElement = document.createElement("div");
             messageElement.classList.add("message");
 
             const messageTextElement = document.createElement("span");
@@ -77,6 +141,6 @@
 
             document.getElementById("messages-container").scrollTop = document.getElementById("messages-container").scrollHeight;
         });
-	</script>
+    </script>
 </body>
 </html>

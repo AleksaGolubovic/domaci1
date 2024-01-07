@@ -17,40 +17,25 @@ app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, 'public')));
 
 const server = http.createServer(app);
-const io = socketio(server).listen(server);
 
-function sendMessage(socket) {
-    client.lRange("messages", "0", "-1", (err, data) => {
-        data.map(x => {
-            const usernameMessage = x.split(":");
-            const redisUsername = usernameMessage[0];
-            const redisMessage = usernameMessage[1];
-
-            socket.emit("message", {
-                from: redisUsername,
-                message: redisMessage
-            });
-        });
-    });
-}
+const io = require("socket.io")(server, {
+    maxHttpBufferSize: 1e8, pingTimeout: 60000
+});
 
 io.on("connection", socket => {
-    sendMessage(socket);
-
     socket.on("message", ({ message, from }) => {
-        client.rPush("messages", `${from}:${message}`);
-
+        if (message.type === "text") {
+            client.rPush("messages", `${from}:${message.content}`);
+        } else if (message.type === "file") {
+            client.rPush("messages", `${from}:${JSON.stringify(message)}`);
+        }
         io.emit("message", { from, message });
     });
 });
 
 app.get("/chat", (req, res) => {
     const username = req.query.username;
-
     io.emit("joined", username);
-
-    client.rPush("users", `${username}`);
-    
 	res.render("chat", { username });
 });
 

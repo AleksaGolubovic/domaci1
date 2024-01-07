@@ -78,17 +78,18 @@ h2 {
 	flex: 1;
 	width: 80%;
 	/*max-width: 200px;*/
-	display: flex;
+	/*display: flex;*/
+    display: flex;
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
 	padding: 10px;
 }
 
-input {
-	flex: 8;
-	width: calc(100% - 20px);
-	padding: 10px;
+        input {
+            flex: 8;
+            width: calc(100% - 20px);
+            padding: 10px;
             box-sizing: border-box;
             border: 1px solid #5e5e5e;
             border-radius: 5px;
@@ -99,10 +100,10 @@ input {
         }
 
         input:focus {
-            border-color: #9acffa;
+            border-color: #ffaaaa;
         }
 
-        button {
+        #sendButton {
         margin-left: 10px;
             flex: 2;
             background-color: #5e5e5e;
@@ -113,10 +114,29 @@ input {
             cursor: pointer;
             font-size: 16px;
             transition: background-color 0.3s ease-in-out;
+
         }
 
-        button:hover {
+        #fileButton {
+            margin-left: 10px;
+            flex: 1;
+            background-color: #5e5e5e;
+            color: #ffffff;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        #sendButton:hover {
             background-color: #7a7a7a; 
+        }
+
+
+        #fileButton:hover {
+            background-color: #7a7a7a;
         }
 
         #joined {
