@@ -1,6 +1,7 @@
 const express = require("express");
+const path = require('path');
 const app = express();
-const PORT = 5000;
+const PORT = 3000;
 const http = require("http");
 const socketio = require("socket.io");
 
@@ -12,6 +13,8 @@ const client = redis.createClient();
 	})();
 
 app.set("view engine", "ejs");
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 const server = http.createServer(app);
 const io = socketio(server).listen(server);
@@ -45,7 +48,10 @@ app.get("/chat", (req, res) => {
     const username = req.query.username;
 
     io.emit("joined", username);
-    res.render("chat", { username });
+
+    client.rPush("users", `${username}`);
+    
+	res.render("chat", { username });
 });
 
 app.get("/", (req, res) => {
