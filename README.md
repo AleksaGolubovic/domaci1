@@ -8,6 +8,8 @@ supported formats:
 &emsp;videos: mp4, webm.  
 &emsp;audio: ogg, mp3, wav.  
 
+max file size: 100mb
+
 ## Run Locally
 
 Clone the project
