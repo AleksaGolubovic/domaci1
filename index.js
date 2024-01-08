@@ -42,16 +42,13 @@ io.on("connection", async socket => {
     }
 
     socket.on("message", async ({ message, from }) => {
-        if (message.type === "text") {
-            await client.rPush("messages", `${from}:${JSON.stringify(message)}`);
-        } else if (message.type === "file") {
-            await client.rPush("messages", `${from}:${JSON.stringify(message)}`);
-        }
+        await client.rPush("messages", `${from}:${JSON.stringify(message)}`);
         const color = await client.get(`${from}`);
         io.emit("message", { from, color, message });
     });
 
     socket.on("disconnect", async () => {
+        await client.del(username);
         await client.sRem("onlineUsers", username);
     });
 });
