@@ -18,8 +18,21 @@ form {
 	transition: box-shadow 0.3s ease-in-out;
 }
 
+#container {
+	display:flex;
+}
+
+#username {
+	flex: 9;
+}
+
+#colorPicker {
+	flex: 1;
+	margin-left: 10px;
+	height: 50px;
+}
+
 input {
-	width: 100%;
 	padding: 10px;
 	margin-bottom: 10px;
 	box-sizing: border-box;
@@ -36,9 +49,10 @@ input:focus {
 }
 
 button {
+	float: right;
 	background-color: #5e5e5e;
 	color: #ffffff;
-	padding: 12px 20px;
+	padding: 12px 40px;
 	border: none;
 	border-radius: 5px;
 	cursor: pointer;

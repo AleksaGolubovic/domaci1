@@ -1,7 +1,8 @@
 
 # Redis Chat App
 
-socket.io persistent chat app that uses redis to store online users and messages (including media files)  
+socket.io chat app that uses redis to store online users and messages (including media files),  
+with optional persistence (default = 20 message).  
 
 supported formats:  
 &emsp;images: jpg, jpeg, png, gif.  

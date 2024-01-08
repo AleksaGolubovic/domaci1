@@ -9,11 +9,13 @@
 	<link rel="stylesheet" href="/styles/index_styles.css">
 </head>
 <body>
-    <form action="/chat">
-        <input id="username" type="text" name="username" placeholder="Username" />
-        <br />
-        <br />
+   <form id="colorForm" action="/chat">
+        <div id="container">
+            <input id="username" type="text" name="username" placeholder="Username" />
+            <input id="colorPicker" type="color" name="color"  value="#ddcccc"/>
+        </div>
         <button type="submit">Enter</button>
     </form>
 </body>
+<script src="/socket.io/socket.io.js"></script>
 </html>

@@ -68,14 +68,17 @@
         }
         document.getElementById("message").addEventListener("keydown", handleKeyPress);
 
-        socket.on("message", ({ from, message }) => {
-        console.log("inside!!!",from);
+        socket.on("message", ({ from, color, message }) => {
+            console.log(from, color, message );
+
             const messageElement = document.createElement("div");
             messageElement.classList.add("message");
 
             const usernameElement = document.createElement("span");
             usernameElement.classList.add("username");
             usernameElement.innerText = `${from}: `;
+            usernameElement.style.marginLeft = "6px";
+            usernameElement.style.color = color;
             messageElement.appendChild(usernameElement);
 
             if (message.type === "text") {
@@ -103,6 +106,7 @@
                     fileLinkElement.innerText = `${message.filename}`;
                     fileLinkElement.href = message.content;
                     fileLinkElement.download = message.filename;
+                    fileLinkElement.style.color = "#cc3333";
                     messageElement.appendChild(fileLinkElement);
                 }
             }
@@ -130,13 +134,20 @@
             return audioExtensions.includes(extension);
         }
 
-        socket.on("joined", username => {
+        socket.on("joined", ({username, color}) => {
+            console.log(color);
             const messageElement = document.createElement("div");
             messageElement.classList.add("message");
 
             const messageTextElement = document.createElement("span");
-            messageTextElement.innerText = `${username} has joined`;
+            const messageTextElement2 = document.createElement("span");
+            messageTextElement.id = "joinedSpan";
+            messageTextElement2.id = "joinedSpan";
+            messageTextElement.innerText = `${username}`;
+            messageTextElement.style.color = `${color}`;
+            messageTextElement2.innerText = " has connected";
             messageElement.appendChild(messageTextElement);
+            messageElement.appendChild(messageTextElement2);
 
             document.querySelector("#messages").appendChild(messageElement);
 

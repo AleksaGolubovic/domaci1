@@ -29,14 +29,17 @@ io.on("connection", async socket => {
     await client.sAdd("onlineUsers", username);
 
     const chatHistory = await client.lRange("messages", -20, -1);
-    chatHistory.forEach(msg => {
+    for (let i = 0; i < chatHistory.length; i++) {
+        const msg = chatHistory[i];
         const match = msg.match(/^(.*?):/);
         const user = match ? match[1] : null;
         const contentString = msg.substring(msg.indexOf(':') + 1);
         const contentObject = JSON.parse(contentString);
-        io.to(socket.id).emit("message", { from: user, message: contentObject});
-        console.log(user,contentObject);
-    });
+
+        const color = await client.get(user);
+
+        io.to(socket.id).emit("message", { from: user, color: color, message: contentObject });
+    }
 
     socket.on("message", async ({ message, from }) => {
         if (message.type === "text") {
@@ -44,7 +47,8 @@ io.on("connection", async socket => {
         } else if (message.type === "file") {
             await client.rPush("messages", `${from}:${JSON.stringify(message)}`);
         }
-        io.emit("message", { from, message });
+        const color = await client.get(`${from}`);
+        io.emit("message", { from, color, message });
     });
 
     socket.on("disconnect", async () => {
@@ -54,8 +58,11 @@ io.on("connection", async socket => {
 
 app.get("/chat", async (req, res) => {
     const username = req.query.username;
-    io.emit("joined", username);
-	res.render("chat", { username });
+    const color = req.query.color;
+
+    await client.set(username,color);
+
+    io.emit("joined", {username, color});
 
     const onlineUsers = await client.sMembers("onlineUsers");
 

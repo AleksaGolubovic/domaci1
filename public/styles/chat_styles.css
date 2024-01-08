@@ -1,7 +1,7 @@
 body {
 	font-family: 'Roboto', sans-serif;
 	background-color: #1f1f1f; 
-	color: #ffffff;
+	color: #e8e8e8;
 	margin: 0;
 	padding: 20px;
 	display: flex;
@@ -33,10 +33,8 @@ body {
 
 #messages {
 	background-color: #2e2e2e; 
-	//padding: 20px;
-	border-radius: 1px;
-	//box-shadow: 0 0 10px rgba(255, 255, 255, 0.1); 
-	width: 90%;
+	border-radius: 10px;
+	width: 100%;
 	transition: box-shadow 0.3s ease-in-out;
 	scrollbar-width: thin; 
 	scrollbar-color: transparent transparent; 
@@ -133,7 +131,13 @@ margin-left: 10px;
 #joined {
 	margin-top: 20px;
 	text-align: center;
-	color: #d9d9d9; 
+
+}
+
+#joinedSpan{
+	margin-left: 6px;
+    font-weight: bold;
+	font-style: italic;
 }
 
 @keyframes fadeIn {
