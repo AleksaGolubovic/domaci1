@@ -29,7 +29,7 @@
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
-        const socket = io("http://localhost:3000");
+        const socket = io("http://localhost:3000", { query: { username: "<%= username %>" } });
 
         function sendText() {
             const message = document.querySelector("#message").value;
@@ -69,6 +69,7 @@
         document.getElementById("message").addEventListener("keydown", handleKeyPress);
 
         socket.on("message", ({ from, message }) => {
+        console.log("inside!!!",from);
             const messageElement = document.createElement("div");
             messageElement.classList.add("message");
 
@@ -99,7 +100,7 @@
                     messageElement.appendChild(audioElement);
                 } else {
                     const fileLinkElement = document.createElement("a");
-                    fileLinkElement.innerText = `Download ${message.filename}`;
+                    fileLinkElement.innerText = `${message.filename}`;
                     fileLinkElement.href = message.content;
                     fileLinkElement.download = message.filename;
                     messageElement.appendChild(fileLinkElement);
