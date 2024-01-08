@@ -15,7 +15,7 @@ max file size: 100mb
 Clone the project
 
 ```bash
-  git clone github.com/AleksaGolubovic/domaci1.git
+  git clone https://github.com/AleksaGolubovic/domaci1.git
 ```
 
 Go to the project directory
