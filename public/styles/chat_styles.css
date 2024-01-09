@@ -42,9 +42,8 @@ body {
 
 #chat-container h1 {
 	display: flex;
-  align-items: center;
+	align-items: center;
 }
-
 
 img {
 	box-shadow: 0px 0px 10px black;
@@ -60,6 +59,7 @@ img {
 }
 
 #messages-container {
+	height: calc(100% - 160px);
 	border-radius: 10px;
 	background-image: linear-gradient(to top, rgba(20,10,10,.7),  rgba(20,20,30,0));
 	width: 95%;
@@ -103,6 +103,11 @@ img {
 	align-items: center;
 	justify-content: space-between;
 	padding: 10px;
+
+	position: fixed;
+    bottom: calc(100% - 100vh);
+
+
 }
 
 input {
