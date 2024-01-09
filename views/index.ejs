@@ -9,12 +9,16 @@
 	<link rel="stylesheet" href="/styles/index_styles.css">
 </head>
 <body>
-   <form id="colorForm" action="/chat">
-        <div id="container">
-            <input id="username" type="text" name="username" placeholder="Username" />
-            <input id="colorPicker" type="color" name="color"  value="#ddcccc"/>
+   <form id="userForm" action="/chat">
+        <div id="container1">
+            <input id="colorPicker" type="color" name="color"  value="#ffffff"/>
+            <input id="username" type="text" name="username" placeholder="Username" required/>
         </div>
-        <button type="submit">Enter</button>
+		<br>
+        <div id="container2">
+        	<button id="b1" type="submit">Join Room</button>
+        <!--	<button id="b2" type="submit">Create Room</button> -->
+        </div>
     </form>
 </body>
 <script src="/socket.io/socket.io.js"></script>
